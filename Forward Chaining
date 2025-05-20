@@ -1,0 +1,16 @@
+def forward_chaining(facts, rules):
+    inferred = set(facts)
+    while True:
+        new_facts = {conclusion for conditions, conclusion in rules if conditions <= inferred and conclusion not in inferred}
+        if not new_facts:
+            break
+        inferred |= new_facts
+    return inferred
+facts = set(input("Enter known facts (space-separated): ").split())
+rules = []
+rule_count = int(input("Enter number of rules: "))
+for _ in range(rule_count):
+    condition = set(input("IF (conditions, space-separated): ").split())
+    result = input("THEN (single conclusion): ")
+    rules.append((condition, result))
+print("Inferred facts:", forward_chaining(facts, rules))
