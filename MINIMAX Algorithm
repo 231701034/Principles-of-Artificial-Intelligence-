@@ -1,0 +1,19 @@
+def minimax(depth, node_index, is_max, scores, height):
+    if depth == height:
+        return scores[node_index]
+    if is_max:
+        return max(minimax(depth + 1, node_index * 2, False, scores, height),
+                   minimax(depth + 1, node_index * 2 + 1, False, scores, height))
+    else:
+        return min(minimax(depth + 1, node_index * 2, True, scores, height),
+                   minimax(depth + 1, node_index * 2 + 1, True, scores, height))
+import math
+levels = int(input("Enter height of the game tree (e.g., 3 for 8 leaf nodes): "))
+leaf_count = 2 ** levels
+print(f"Enter {leaf_count} leaf node values (space-separated):")
+leaf_values = list(map(int, input().split()))
+if len(leaf_values) != leaf_count:
+    print("Error: Number of leaf values must be", leaf_count)
+else:
+    result = minimax(0, 0, True, leaf_values, levels)
+    print("Optimal value (Minimax):", result)
