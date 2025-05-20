@@ -1,0 +1,29 @@
+import heapq
+def a_star(graph, heuristic, start, goal):
+    queue = [(heuristic[start], 0, start, [start])]
+    visited = set()
+    while queue:
+        est_total, cost_so_far, current, path = heapq.heappop(queue)
+        if current == goal:
+            return path
+        if current in visited:
+            continue
+        visited.add(current)
+        for neighbor, weight in graph[current]:
+            if neighbor not in visited:
+                new_cost = cost_so_far + weight
+                est = new_cost + heuristic[neighbor]
+                heapq.heappush(queue, (est, new_cost, neighbor, path + [neighbor]))
+    return None
+graph = {}
+heuristic = {}
+nodes = int(input("Enter number of nodes: "))
+for _ in range(nodes):
+    node = input("Node name: ")
+    edges = input(f"Enter edges from {node} (format: neighbor:cost space-separated): ").split()
+    graph[node] = [(e.split(':')[0], int(e.split(':')[1])) for e in edges]
+    heuristic[node] = int(input(f"Heuristic value for {node}: "))
+start = input("Start node: ")
+goal = input("Goal node: ")
+path = a_star(graph, heuristic, start, goal)
+print("Shortest path:", path)
