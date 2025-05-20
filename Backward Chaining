@@ -1,0 +1,20 @@
+def backward_chaining(goal, facts, rules, visited=None):
+    if visited is None:
+        visited = set()
+    if goal in facts:
+        return True
+    if goal in visited:
+        return False
+    visited.add(goal)
+    return any(all(backward_chaining(cond, facts, rules, visited) for cond in conditions)
+               for conditions, conclusion in rules if conclusion == goal)
+facts = set(input("Enter known facts (space-separated): ").split())
+rules = []
+rule_count = int(input("Enter number of rules: "))
+for _ in range(rule_count):
+    condition = set(input("IF (conditions, space-separated): ").split())
+    result = input("THEN (single conclusion): ")
+    rules.append((condition, result))
+goal = input("Enter goal to prove: ")
+result = backward_chaining(goal, facts, rules)
+print("Goal achieved?" , result)
